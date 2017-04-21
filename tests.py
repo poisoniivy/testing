@@ -46,11 +46,18 @@ class PartyTests(unittest.TestCase):
         """Can we keep Mel out?"""
 
         # FIXME: write a test that mel can't invite himself
-        result = self.client.get("/")
-        self.assertTrue(party.is_mel("Mel Melitpolski", "some email"))
-        self.assertTrue(party.is_mel("Mel Melitpolski", "mel@ubermelon.com"))
-        self.assertTrue(party.is_mel("Melonhead", "mel@ubermelon.com"))
-        self.assertFalse(party.is_mel("Caroline", "caro@line.com"))
+        rsvp_info = {'name': "Mel Melitpolski", 'email': "mel@ubermelon.com"}
+
+        result = self.client.post("/rsvp", data=rsvp_info,
+                                  follow_redirects=True)
+
+
+        # result = self.client.get("/")
+        # self.assertTrue(party.is_mel("Mel Melitpolski", "some email"))
+        # self.assertTrue(party.is_mel("Mel Melitpolski", "mel@ubermelon.com"))
+        # self.assertTrue(party.is_mel("Melonhead", "mel@ubermelon.com"))
+        # self.assertFalse(party.is_mel("Caroline", "caro@line.com"))
+        self.assertIn("Sorry, Mel. This is kind of awkward.", str(result.data))
         print "No Mel test works"
 
 
